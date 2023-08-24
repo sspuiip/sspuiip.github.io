@@ -7,19 +7,21 @@ categories: []
 date: '2019-02-05T00:00:00Z'
 slides:
   # Choose a theme from https://github.com/hakimel/reveal.js#theming
-  theme: black
+  theme: black # white
   # Choose a code highlighting style (if highlighting enabled in `params.toml`)
   #   Light style: github. Dark style: dracula (default).
-  highlight_style: dracula
+  highlight_style: dracula #github
 ---
 
-# Create slides in Markdown with Wowchemy
+# Kernel Methods for Machine Learning
 
-[Wowchemy](https://wowchemy.com/) | [Documentation](https://wowchemy.com/docs/content/slides/)
+Sheng Luo 
+
+School of Computer and information, SSPU
 
 ---
 
-## Features
+## RKHS in ML: Testing Statistical Dependence
 
 - Efficiently write slides in Markdown
 - 3-in-1: Create, Present, and Publish your slides
@@ -27,6 +29,25 @@ slides:
 - Mobile friendly slides
 
 ---
+
+### The constrained covariance
+
+- The constrained covariance is
+
+$$
+\textrm{COCO}(P_{XY})=\sup\limits_{\Vert f\Vert_\mathcal{F}\le 1; \Vert g\Vert_\mathcal{G}\le 1; } \textrm{cov}[f(x),g(y)]
+$$
+
+In-line math: $x + y = z$
+
+Block math:
+
+$$
+f\left( x \right) = \;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
+$$
+
+---
+
 
 ## Controls
 

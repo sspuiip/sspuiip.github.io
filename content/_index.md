@@ -5,27 +5,27 @@ date: 2022-10-24
 type: landing
 
 sections:
-  - block: hero
-    content:
-      title: SSPU-IIP Lab
-      image:
-        filename: hero-academic.png
-      # cta:
-      #   label: '**Get Started**'
-      #   url: https://wowchemy.com/templates/
-      # cta_alt:
-      #   label: Ask a question
-      #   url: https://discord.gg/z8wNYzb
-      # cta_note:
-      #   label: >-
-      #     <div style="text-shadow: none;"><a class="github-button" href="https://github.com/wowchemy/wowchemy-hugo-themes" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star">Star Wowchemy Website Builder</a></div><div style="text-shadow: none;"><a class="github-button" href="https://github.com/wowchemy/starter-hugo-academic" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star">Star the Academic template</a></div>
-      text: |-
-        **Brief Introduction**: SSPUIIP is a research group of Shanghai polytechnic university, whose main research interesting is focused on intelligent information processing.  The laboratory is a member of the school of computer science and engineering, SSPU, which is located at No. 2360, Jinhai Road, Pudong New Distinct, Shanghai, PRC.
-    design:
-      background:
-        gradient_end: '#1976d2'
-        gradient_start: '#004ba0'
-        text_color_light: true
+  # - block: hero
+  #   content:
+  #     title: SSPU-IIP Lab
+  #     image:
+  #       filename: hero-academic.png
+  #     # cta:
+  #     #   label: '**Get Started**'
+  #     #   url: https://wowchemy.com/templates/
+  #     # cta_alt:
+  #     #   label: Ask a question
+  #     #   url: https://discord.gg/z8wNYzb
+  #     # cta_note:
+  #     #   label: >-
+  #     #     <div style="text-shadow: none;"><a class="github-button" href="https://github.com/wowchemy/wowchemy-hugo-themes" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star">Star Wowchemy Website Builder</a></div><div style="text-shadow: none;"><a class="github-button" href="https://github.com/wowchemy/starter-hugo-academic" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star">Star the Academic template</a></div>
+  #     text: |-
+  #       **Brief Introduction**: SSPUIIP is a research group of Shanghai polytechnic university, whose main research interesting is focused on intelligent information processing.  The laboratory is a member of the school of computer science and engineering, SSPU, which is located at No. 2360, Jinhai Road, Pudong New Distinct, Shanghai, PRC.
+  #   design:
+  #     background:
+  #       gradient_end: '#1976d2'
+  #       gradient_start: '#004ba0'
+  #       text_color_light: true
   - block: about.biography
     id: about
     content:
@@ -234,11 +234,11 @@ sections:
   #   design:
   #     columns: '2'
   #     view: compact
-  # - block: tag_cloud
-  #   content:
-  #     title: Popular Topics
-  #   design:
-  #     columns: '2'
+  - block: tag_cloud
+    content:
+      title: Popular Topics
+    design:
+      columns: '2'
   - block: contact
     id: contact
     content:
@@ -248,16 +248,16 @@ sections:
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mi diam, venenatis ut magna et, vehicula efficitur enim.
       # Contact (add or remove contact options as necessary)
       email: test@example.org
-      phone: 888 888 88 88
+      # phone: 888 888 88 88
       appointment_url: 'https://calendly.com'
       address:
-        street: 450 Serra Mall
-        city: Stanford
-        region: CA
-        postcode: '94305'
-        country: United States
-        country_code: US
-      directions: Enter Building 1 and take the stairs to Office 200 on Floor 2
+        street: 2360 Jinhai road
+        city: Shanghai
+        region: Pudong
+        postcode: '201209'
+        country: China
+        country_code: cn
+      # directions: Enter Building 1 and take the stairs to Office 200 on Floor 2
       office_hours:
         - 'Monday 10:00 to 13:00'
         - 'Wednesday 09:00 to 10:00'
@@ -270,10 +270,10 @@ sections:
           icon_pack: fab
           name: Skype Me
           link: 'skype:echo123?call'
-        - icon: video
-          icon_pack: fas
-          name: Zoom Me
-          link: 'https://zoom.com'
+        # - icon: video
+        #   icon_pack: fas
+        #   name: Zoom Me
+        #   link: 'https://zoom.com'
       # Automatically link email and phone or display as text?
       autolink: true
       # Email form provider
