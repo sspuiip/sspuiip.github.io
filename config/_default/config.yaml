@@ -4,7 +4,7 @@
 # This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
 
 title: SSPUIIP # Website name
-baseURL: 'https://9527atct.netlify.app/' # Website URL
+baseURL: 'https://sspuiip.github.io/' # Website URL
 
 ############################
 ## LANGUAGE
