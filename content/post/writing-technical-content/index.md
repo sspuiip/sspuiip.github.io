@@ -116,6 +116,19 @@ renders as
     - Math: $x = {-b \pm \sqrt{b^2-4ac} \over 2a}$
 ```
 
+```markmap
+- Multi-View Clustering
+  - Non-representation Learning
+    - Co-training MVC
+    - Multi-kernel-based MVC
+    - Matrix factorization-based MVC
+  - Representation Learning
+    - Shallow Representation Learning based MVC
+      - Multi-view graph clustering
+      - Multi-view subspace clustering
+    - Deep Representation Learning based MVC
+```
+
 ### Charts
 
 Wowchemy supports the popular [Plotly](https://plot.ly/) format for interactive charts.
@@ -194,6 +207,15 @@ A[Hard] -->|Text| B(Round)
 B --> C{Decision}
 C -->|One| D[Result 1]
 C -->|Two| E[Result 2]
+```
+
+```mermaid
+graph LR
+A[Start] -->|Text| B(Round)
+B --> C{Decision}
+C -->|Yes| D[Result 1]
+C -->|No| E[Result 2]
+
 ```
 
 An example **sequence diagram**:
