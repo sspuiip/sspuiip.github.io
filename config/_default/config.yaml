@@ -11,7 +11,7 @@ baseURL: 'https://sspuiip.github.io/' # Website URL
 ############################
 
 defaultContentLanguage: en
-hasCJKLanguage: false
+hasCJKLanguage: true #false
 defaultContentLanguageInSubdir: false
 removePathAccents: true
 
