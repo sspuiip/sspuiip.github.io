@@ -7,8 +7,8 @@ summary: ""
 authors: [admin]
 tags: [measure]
 categories: [misc]
-date: 2024-12-09
-lastmod: 2024-12-09
+date: 2024-12-09T12:56:30+08:00
+lastmod: 2024-12-09T13:56:30+08:00
 featured: false
 draft: false
 
@@ -34,6 +34,7 @@ projects: []
 ### Pairwise measure
 
 Given a sample dataset $D=\{(\pmb{x}_1,y_1),...,(\pmb{x}_m,y_m)\}$, and two hypotheses ($h_i,h_j$), We have the following statistic observations,
+
 
 |       |   $h_i=+1$ |  $h_i=-1$ |
 | :---: |  :---:     | :---:     |
@@ -72,4 +73,4 @@ $$
 \theta_1=\frac{a+d}{m},\quad\theta_2=\frac{(a+b)(a+c)+(c+d)(b+d)}{m^2}
 $$
 
-Note that, two hypotheses predicted on the dataset $D$ are completely consistent at $\kappa_{ij}=1$, and completely independance at $\kappa_{ij}=0$. In case of $\kappa_{ij}<0$, it is mean that the chance of hypotheses reach agreement is less than the expectation of random prediction.
+Note that, two hypotheses predicted on the dataset $D$ are completely consistent at $\kappa_{ij}=1$, and completely independent at $\kappa_{ij}=0$. In case of $\kappa_{ij}<0$, it is mean that the probability that hypotheses reach agreement is less than the expectation of random prediction.
