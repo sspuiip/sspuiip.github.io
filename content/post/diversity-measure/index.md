@@ -2,7 +2,7 @@
 # Documentation: https://wowchemy.com/docs/managing-content/
 
 title: "Diversity Measure"
-subtitle: "To measure the consistency of hypotheses"
+#subtitle: "To measure the consistency of hypotheses"
 summary: ""
 authors: [admin]
 tags: [measure]
