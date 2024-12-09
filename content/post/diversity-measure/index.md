@@ -29,7 +29,7 @@ image:
 projects: []
 ---
 
-## Measuring two hypothesese consistency
+## Measuring hypothesis consistency
 
 ### Pairwise measure
 
