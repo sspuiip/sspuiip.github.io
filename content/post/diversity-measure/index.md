@@ -72,3 +72,4 @@ $$
 \theta_1=\frac{a+d}{m},\quad\theta_2=\frac{(a+b)(a+c)+(c+d)(b+d)}{m^2}
 $$
 
+Note that, two hypotheses predicted on the dataset $D$ are completely consistent at $\kappa_{ij}=1$, and completely independance at $\kappa_{ij}=0$. In case of $\kappa_{ij}<0$, it is mean that the chance of hypotheses reach agreement is less than the expectation of random prediction.
