@@ -6,7 +6,7 @@ subtitle: "Using co-training algorithms to enhance MVC"
 summary: ""
 authors: [admin]
 tags: [nvc]
-categories: [notes]
+categories: [paper]
 date: 2023-08-31T12:56:30+08:00
 lastmod: 2023-08-31T12:56:30+08:00
 featured: false
