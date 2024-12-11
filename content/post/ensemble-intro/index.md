@@ -36,6 +36,11 @@ projects: []
   - 均值法
     - 简单平均法
     - 加权平均法
+  - 投票法
+    - 绝对多数投票法
+    - 相对多数投票法
+    - 加权投票法
+    - 软投票法
 ```
 
 
@@ -119,5 +124,58 @@ $$
 {{</math>}}
 前提是$C$矩阵可逆，但一般情况下不可行。简单平均法为加权平均法的特例，但也不意味着效果一定不比加权平均法差。
 
+### 投票法
 
+&emsp;&emsp;多值问题（一般指分类），投票法是最基本的结合方法。假设有$T$个不同的分类器{{<math>}}$\{h_1,...,h_T\}${{</math>}}，投票法要从$l$个标记$(c_1,...,c_l)$中给出所有分类器结合后的输出类别。一般情况，分类器$h_i$的输出结果是一个$l$维向量$(h_i^1(\pmb{x},h_i^2(\pmb{x},...,h_i^l(\pmb{x}))$,其中
+{{<math>}}
+$$
+h_i^j(\pmb{x})\in\left\{\begin{array}{cc}[0,1],& c_j为类别概率;\\ \{0,1\},&c_j为类别. \end{array} \right.
+$$
+{{</math>}}
+
+- [x] 绝对多数投票法：绝对多数投票的输出为获票过半的类别标记。如果所有票都未过半，则拒绝。
+
+{{<math>}}
+$$
+H(\pmb{x})=\left\{\begin{array}{cc}c_j,& \sum_{i=1}^T h_i^j(\pmb{x})>\frac12\sum_{k=1}^l\sum_{i=1}^Th_i^k(\pmb{x});\\ reject,&otherwise. \end{array} \right.
+$$
+{{</math>}}
+
+
+
+- [x] 相对多数投票法：相对多数投票法的输出为获票最多的类别标记。
+
+{{<math>}}
+$$
+H(\pmb{x})=c_{\mathop{\arg\max}\limits_{j}\sum_{i=1}^T h_i^j(\pmb{x})}
+$$
+{{</math>}}
+
+- [x] 加权投票法
+{{<math>}}
+$$
+H(\pmb{x})=c_{\mathop{\arg\max}\limits_{j}\sum_{i=1}^T w_ih_i^j(\pmb{x})},\quad\sum_i w_i=1 \wedge \pmb{w}\succeq 0
+$$
+{{</math>}}
+
+- [x] 软投票法
+
+&emsp;&emsp;对于类别概率输出的分类器，一般采用软投票法。如果所有分类器都且有相同权重，则可以对所有输出进行平均，即
+{{<math>}}
+$$
+H^j(\pmb{x})=\frac1T\sum_{i=1}^Th_i^j(\pmb{x})
+$$
+{{</math>}}
+  - [ ]分类器权重投票法
+{{<math>}}
+$$
+H^j(\pmb{x})=\sum_{i=1}^Tw_ih_i^j(\pmb{x})
+$$
+{{</math>}}
+- [ ]类别权重投票法
+{{<math>}}
+$$
+H^j(\pmb{x})=\sum_{i=1}^Tw_i^jh_i^j(\pmb{x})
+$$
+{{</math>}}
 
