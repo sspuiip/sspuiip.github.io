@@ -15,6 +15,9 @@ math: true
 diagram: true
 
 
+
+
+
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
 # Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
@@ -41,6 +44,13 @@ projects: []
     - 相对多数投票法
     - 加权投票法
     - 软投票法
+  - 学习结合法
+    - Stacking
+    - 无限集成
+  - 相关方法
+    - 纠错输出编码法
+    - 动态分类器选择法
+    - 混合专家模型
 ```
 
 
@@ -49,7 +59,7 @@ projects: []
 - 多个假设可降低单个假设陷入局部最优的风险。
 - 结合多个假设可以拓展假设空间，相较于单个假设，更有可能近似真实未知假设。
 
-### 均值法
+### 1. 均值法
 
 &emsp;&emsp;对于数值型输出问题，均值法是最基本的的结合方法。均值法分为简单平均法和加权平均法。下面是相应的简单介绍。
 
@@ -124,7 +134,7 @@ $$
 {{</math>}}
 前提是$C$矩阵可逆，但一般情况下不可行。简单平均法为加权平均法的特例，但也不意味着效果一定不比加权平均法差。
 
-### 投票法
+### 2. 投票法
 
 &emsp;&emsp;多值问题（一般指分类），投票法是最基本的结合方法。假设有$T$个不同的分类器{{<math>}}$\{h_1,...,h_T\}${{</math>}}，投票法要从$l$个标记$(c_1,...,c_l)$中给出所有分类器结合后的输出类别。一般情况，分类器$h_i$的输出结果是一个$l$维向量$(h_i^1(\pmb{x},h_i^2(\pmb{x},...,h_i^l(\pmb{x}))$,其中
 {{<math>}}
@@ -179,3 +189,104 @@ H^j(\pmb{x})=\sum_{i=1}^Tw_i^jh_i^j(\pmb{x})
 $$
 {{</math>}}
 
+### 3. Stacking
+
+&emsp;&emsp;学习结合法：结合通过学习器训练得到集成。Stacking是通过训练的形式，学习得到个体学习器结合方式的集成学习方法。个体学习器一般称为一级学习器，学习结合的学习器称为二级学习器，也称为元学习器。具体学习过程大致如下：
+
+```
+#1. 训练一级学习器
+for t=1..T:
+  h_t = L_t(D)
+
+D'= emptyset
+
+#2. 生成新数据集
+for i=1..m:
+  for t=1..T:
+    z_it = h_t(x_i)
+  D' = D' U ((z_i1,...,z_iT),y_i)
+
+#3. 训练二级学习器
+h' = L(D')
+```
+
+最后的输出形式为，
+
+$$
+H(\pmb{x})=h'(h_1(\pmb{x}),...,h_T(\pmb{x}))
+$$
+
+### 4. 无限集成
+
+&emsp;&emsp;思考：当$T\rightarrow\infty$时，该如何开展集成学习？引出了一个问题：无限多个假设集如何集成？
+
+&emsp;&emsp;无限集成是指：集成无限多假设集的集成框架。无限集成可看成对所有假设集都进行结合的一种学习方法。结合核方法，可以将无限假设集嵌入核中，通过支持向量机学习，可获得无限假设集的集成方式。
+
+&emsp;&emsp;假设{{<math>}}$\mathcal{H}=\{h_a:a\in\mathcal{C}\}${{</math>}}，其中$\mathcal{C}$是测度空间。嵌入$\mathcal{H}$的核定义为，
+{{<math>}}
+$$
+K_{\mathcal{H},r}(\pmb{x}_i,\pmb{x}_j)=\int_{\mathcal{C}}\Phi_{\pmb{x}_i}(a)\Phi_{\pmb{x}_j}(a)da
+$$
+{{</math>}}
+其中，$\Phi_{\pmb{x}}(a)=r(a)h_a(\pmb{x})$，该核是有效核函数[Scholkopf & Smola, 2002]。该框架可以定义出原问题如下，
+{{<math>}}
+$$
+\begin{split}
+\min\limits_{w\in\mathcal{L}_2(\mathcal{C}),b\in\mathbb{R},\epsilon\in\mathbb{R}^m}\quad &\frac12\int_{\mathcal{C}}w^2(a)da+C\sum_{i=1}^m\epsilon_i\\
+\textrm{s.t.}\quad &y_i\left(\int_{\mathcal{C}}w(a)r(a)h_a(\pmb{x})da + b \right)\ge 1-\epsilon_i\\
+&\epsilon_i\ge 0(\forall i=1,...,m)
+\end{split}
+$$
+{{</math>}}
+最终分类器为，
+{{<math>}}
+$$
+g(\pmb{x})=\textrm{sign}\left( \int_{\mathcal{C}}w(a)r(a)h_a(\pmb{x})da + b \right)
+$$
+{{</math>}}
+&emsp;&emsp;使用拉格朗日乘子法和核技巧，可以得到对偶问题，最终分类器可以通过核$K_{\mathcal{H},r}$表示为，
+{{<math>}}
+$$
+g(\pmb{x})=\textrm{sign}\left(\sum_{i=1}^my_i\lambda_iK_{\mathcal{H},r}(\pmb{x}_i,\pmb{x}_j) + b \right)
+$$
+{{</math>}}
+
+### 5. 纠错输出编码法
+
+&emsp;&emsp;该方法由编码解码**两个阶段组**成：
+- **编码阶段**： 首先构建一组$B$个不同的类别标记划分{$c_1,...,c_l$}，然后在每个划分上训练$B$个二元分类器$h_1,...,h_B$。
+- **解码阶段**： 给定样本$\pmb{x}$，使用$B$个二元分类器的输出生成一个码字。然后该码字和每一个类别的码字进行对比，具有最相似码字的类别作为输出。
+
+&emsp;&emsp;以下是$l(=4)$个类别$B(=5)$个分类器的二元纠错输出码示例：
+{{< table path="code2.csv" header="true" caption="四类问题的二元纠错输出码示例." >}}
+
+&emsp;&emsp;以下是$l(=4)$个类别$B(=7)$个分类器的三元纠错输出码示例：
+{{< table path="code3.csv" header="true" caption="四类问题的三元纠错输出码示例.(注：0与-1，+1的距离为0.5)" >}}
+
+- **常见二元解码器**
+  - [x] 汉明解码器
+  {{<math>}}
+  $$
+  \textrm{HD}(\pmb{v},\pmb{w})=\frac{\sum_j (1-\textrm{sign}(v_j-w_j))}{2}
+  $$
+  {{</math>}}
+  - [x] 欧氏解码器
+   {{<math>}}
+  $$
+  \textrm{ED}(\pmb{v},\pmb{w})=\sqrt{\sum_j(v_j-w_j)^2}
+  $$
+  {{</math>}}
+
+- **常见三元解码器**
+  - [x] 衰减欧氏解码器
+   {{<math>}}
+  $$
+  \textrm{AED}(\pmb{v},\pmb{w})=\sqrt{\sum_j|w_j|(v_j-w_j)^2}
+  $$
+  {{</math>}}
+  - [x] 基于损失解码器
+  {{<math>}}
+  $$
+  \textrm{LB}(\pmb{x},\pmb{w})=\sum_j L[h_j(\pmb{x}),w_j]
+  $$
+  {{</math>}}
