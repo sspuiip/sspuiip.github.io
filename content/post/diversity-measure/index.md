@@ -92,9 +92,46 @@ $$
 
 &emsp;&emsp;需要注意的是：以上结果是回归问题得到的结论。对于分类问题很难得到类似结果。估计$\bar{\textrm{ambi}}(h)$也会很困难，一般由$\textrm{err}(H)-\bar{\textrm{err}}(h)$而得到，并非真正的多样性。虽有启发，但不能对多样性提供统计的形式化描述。
 
-### Pairwise measure
+### 1.2 偏差-方差-协方差分解
 
-Given a sample dataset $D=\{(\pmb{x}_1,y_1),...,(\pmb{x}_m,y_m)\}$, and two hypotheses ($h_i,h_j$), We have the following statistic observations,
+&emsp;&emsp;Geman et al. [1992] 将学习器的泛化误差分解为固有噪声、偏差和方差三部分。
+
+{{<math>}}
+$$
+\begin{split}
+\textrm{err}(h)&=\mathbb{E}\left[ (h-y)^2\right]\\
+&=(\mathbb{E}[h]-y)^2 + \mathbb{E}\left[(h-\mathbb{E}[h])^2\right]\\
+&=\textrm{bias}^2(h)+\textrm{variance}(h)
+\end{split}
+$$
+{{</math>}}
+由于固有噪声很难估计，一般被纳入偏差项。因此，泛化误差被分解为偏差项和方差项。
+- **偏差项**一般表示学习器误差期望的偏离程度(预测均值与真实目标差的期望)；
+- **方差项**表示学习器对不同数据集敏感程度(预测值与预测值均值差的期望)。
+
+&emsp;&emsp;假设个体学习器以相同的权重结合[Ueda & Nakano, 1996]，则集成后的平方误差可以分解为，
+{{<math>}}
+$$
+\textrm{err}(H)=\bar{\textrm{bias}}^2(H)+\frac1T\bar{\textrm{variance}}(H)+\left(1-\frac1T\right)\bar{\textrm{covariance}}(H)
+$$
+{{</math>}}
+其中，
+{{<math>}}
+$$
+\begin{split}
+\bar{\textrm{bias}}^2(H) &= \frac1T\sum_{i=1}^T (\mathbb{E}(h_i)-y)\\
+\bar{\textrm{variance}}(H) &= \frac1T\sum_{i=1}^T \mathbb{E}[h_i-\mathbb{E}(h_i)]\\
+\bar{\textrm{covariance}}(H) &= \frac{1}{T(T-1)}\sum_{i=1}^T\sum_{j=1,j\neq i}^T\mathbb{E}(h_i-\mathbb{E}[h_i])\mathbb{E}(h_j-\mathbb{E}[h_j])
+\end{split}
+$$
+{{</math>}}
+上式表明，集成的平方误差依赖于协方差项，体现了不同学习器之间的关联。不同于其它两项，协方差项的系数可以为负。此外，该式由回归设定下推导得到，对分类任务难以取得类似结果，因此也难以成为集成多样性的形式化定义。
+
+## 2. 多样性度量
+
+### 2.1 成对度量
+
+假设有数据集$D=\{(\pmb{x}_1,y_1),...,(\pmb{x}_m,y_m)\}$， 以及任意两个学习器($h_i,h_j$)，并且有以下统计观察结果，
 
 
 |       |   $h_i=+1$ |  $h_i=-1$ |
@@ -102,7 +139,7 @@ Given a sample dataset $D=\{(\pmb{x}_1,y_1),...,(\pmb{x}_m,y_m)\}$, and two hypo
 | $h_j=+1$| a  |  c |
 | $h_j=-1$| b  |  d |
 
-where $a+b+c+d=m$.
+其中$a+b+c+d=m$。
 
 - [x] **Divergency measure**
 
@@ -129,9 +166,100 @@ $$
 $$
 \kappa_{ij}=\frac{\theta_1-\theta_2}{1-\theta_2}
 $$
-where,
+其中,
 $$
 \theta_1=\frac{a+d}{m},\quad\theta_2=\frac{(a+b)(a+c)+(c+d)(b+d)}{m^2}
 $$
+注意： 当$\kappa_{ij}=1$时，数据集$D$上的两个学习器完全一致；$\kappa_{ij}=0$时完全独立；$\kappa_{ij}<0$时，学习器达成一致的概率要小于随机预测的期望。
 
-Note that, two hypotheses predicted on the dataset $D$ are completely consistent at $\kappa_{ij}=1$, and completely independent at $\kappa_{ij}=0$. In case of $\kappa_{ij}<0$, it is mean that the probability that hypotheses reach agreement is less than the expectation of random prediction.
+### 2.2 非成对度量
+
+- [x] **Kohavi-Wolpert方差**
+
+&emsp;&emsp;假设个体学习器在类目标$y$上预测的变化性为，
+{{<math>}}
+$$
+\textrm{var}_x=\frac12\left( 1-\sum_{y\in\{+1,-1\}} P(y|\pmb{x})^2 \right)
+$$
+{{</math>}}
+若考虑两个分类器的输出($\tilde{y}=+1$：正确、$\tilde{y}=-1$：错误)和估计$P(\tilde{y}=+1|\pmb{x})$和$P(\tilde{y}=+1|\pmb{x})$来度量多样性，即
+{{<math>}}
+$$
+\hat{P}(\tilde{y}=1|\pmb{x})=\frac{\rho(\pmb{x})}{T},\quad \hat{P}(\tilde{y}=-1|\pmb{x})=1-\frac{\rho(\pmb{x})}{T}
+$$
+{{</math>}}
+其中，$\rho(\pmb{x})$为对样本$\pmb{x}$分类正确的个体学习器数目。将上式代入变化性等式，则有单个样本的变化性度量：
+{{<math>}}
+$$
+\begin{split}
+\textrm{var}_x &= \frac12\left( 1-\left[\frac{\rho(\pmb{x})^2}{T^2} + \left(1-\frac{\rho(\pmb{x})^2}{T^2}\right) \right]\right)\\
+&=\frac{1}{T^2}\rho(\pmb{x})(T-\rho(\pmb{x}))
+\end{split}
+$$
+{{</math>}}
+
+
+则有**kw度量**：
+{{<math>}}
+$$
+\boxed{\textrm{kw}=\frac{1}{mT^2}\sum_{k=1}^m \rho(\pmb{x}_k)(T-\rho(\pmb{x}_k))}
+$$
+{{</math>}}
+
+&emsp;&emsp;可以看出，kw度量的值越大，则差异性越大。
+
+- [x] **评分者一致性**
+
+{{<math>}}
+$$
+\boxed{\kappa=1-\frac{\frac1T\sum_{k=1}^m \rho(\pmb{x}_k)(T-\rho(\pmb{x}_k)) }  {m(T-1)\bar{p}(1-\bar{p})}}
+$$
+{{</math>}}
+其中，
+{{<math>}}
+$$
+\bar{p}=\frac{1}{mT}\sum_{i=1}^T\sum_{k=1}^m\mathbb{I}(h_i(\pmb{x}_k)=y_k)
+$$
+{{</math>}}
+为个体学习器的平均精度。
+
+- [x] **熵**：如果个体学习器分类结果打平，则不一致性最高。
+
+{{<math>}}
+$$
+\textrm{Ent}_{cc}=\frac1m\sum_{k=1}^m\sum_{y\in\{+1,-1\}}-P(y|\pmb{x}_k)\log P(y|\pmb{x}_k)
+$$
+{{</math>}}
+其中，
+{{<math>}}
+$$
+P(y|\pmb{x}_k)=\frac1T\sum_{i=1}^T \mathbb{I}(h_i(\pmb{x}_k)\neq y)
+$$
+{{</math>}}
+
+
+- [x] **通用多样性**：当一个分类器预测错误伴随着另一个分类器预测正确时，多样性最大。
+
+{{<math>}}
+$$
+\textrm{gd}=1-\frac{p^{(2)}}{p^{(1)}}
+$$
+{{</math>}}
+其中，
+{{<math>}}
+$$
+p^{(1)}=\sum_{i=1}^T\frac{i}{T}p_i,\quad p^{(2)}=\sum_{i=1}^T \frac{i}{T}\frac{i-1}{T-1}p_i
+$$
+{{</math>}}
+$p_i$代表随机样本$\pmb{x}$在随机挑选的分类器上预测失败的概率。
+
+## 3. 局限性与增强
+
+&emsp;&emsp;大量实验表明，现有的多样性度量效果不如人意，似乎多样性度量指标和集成预测之间并无明显关系[Kuncheva & Whitaker 2003]。但是有一些有效的启发式方法来增强集成多样性。常用作法是在学习过程中引入随机性，
+- 扰动样本：采样方法，如AdaBoost。
+- 扰动输入特征：不同子空间学习的个体学习器通常是不同的。如随机子空间方法[Ho, 1998]。在子空间训练学习器不仅提高精度，而且加快训练速度。需要提前过滤与目标最不相关的特征。
+- 扰动学习参数:使用不同的学习参数来生成多样学习器。
+- 扰动输出表示：使用不同的输出表示来生成多样化的学习器。如纠错输出码。
+
+&emsp;&emsp;此外，不同的扰动方法还可以组合使用。如随机森林同时扰动样本和输入特征。
+
