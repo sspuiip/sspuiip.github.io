@@ -160,8 +160,23 @@ $$
 
 | 硬标记算法 |
 |:--- |
-|1. 随机选择{{<math>}}$\lambda^{(b)}=\{C_l^{(b)}|l=1,2,...,k\},\lambda^{(b)}\in\Lambda${{</math>}}.|
-|2.    |
+|1. 随机选择{{<math>}}$\lambda^{(b)}=\{C_l^{(b)}|l=1,2,...,k\},\lambda^{(b)}\in\Lambda${{</math>}}.<br/>
+2. $\Lambda=\Lambda-${$\lambda^{(b)}$}<br/>
+3. repeat{ <br/>
+4. &emsp;&emsp;随机选择{{<math>}}$\lambda^{(q)}=\{C_l^{(q)} |l=1,2,...,k \}${{</math>}}与$\lambda^{(b)}$对齐。<br/>
+5. &emsp;&emsp;利用{{<math>}}$O(u,v)=|C_u^{(b)}\cap C_v^{(q)}| $ {{</math>}}初使化矩阵$O$。<br/>
+6. &emsp;&emsp;{{<math>}}$I=\{(u,v)|1\le u,v\le k${{</math>}}。<br/>
+7. &emsp;&emsp;repeat{<br/>
+8. &emsp;&emsp;&emsp;&emsp;{{<math>}}$(u',v')=\mathop{\arg\max}\limits_{(u,v)\in I} O(u,v)${{</math>}}<br/>
+9. &emsp;&emsp;&emsp;&emsp;将{{<math>}}$C_{v'}^{(q)}${{</math>}}重新标记为{{<math>}}$C_{u'}^{(q)}${{</math>}}<br/>
+10. &emsp;&emsp;&emsp;{{<math>}}$ I=I-\{(u',w)|(u',w)\in I\} \cup \{(w,v')|(w,v')\in I\} ${{</math>}}<br/>
+11. &emsp;&emsp;}until $I=\emptyset$<br/>
+12. &emsp;&emsp;$\Lambda=\Lambda-${$\lambda^{(q)}$}<br/>
+13. }until $\Lambda=\emptyset$|
+重新标记后，使用不同的结合策略获得最终聚类结果。
+
+- 软标记对应
+
 
 
 
@@ -192,3 +207,38 @@ $$
 \textrm{sim}(\pmb{x}_i,\pmb{x}_j)=\sum_{q=1}^r\mathbb{I}(\varphi_q(\pmb{x}_i)=\varphi_q(\pmb{x}_i))
 $$
 {{</math>}}
+
+- 第二步可选概率框架
+
+&emsp;&emsp;令$\pmb{y}_i=\varphi(\pmb{x}_i)=(y_1^i,...,y^i_r)^\top$，随机向量$\pmb{y}$可使用一个混合多项式分布表示，
+
+{{<math>}}
+$$
+P(\pmb{y}|\Theta)=\sum_{j=1}^k \alpha_j P_j(\pmb{y}|\theta_j)
+$$
+{{</math>}}
+其中，$k$是混合成分，对应最终类簇的数量。假设$\pmb{y}$的成分是条件独立的，即
+{{<math>}}
+$$
+P_j(\pmb{y}|\theta_j)=\prod_{q=1}^r P_j^{(q)}(y_q|\theta_j^{(q)})
+$$
+{{</math>}}
+其中，$r$为基聚类器数量。并且，条件概率$P_j(\pmb{y}|\theta_j)$可视为一个多项分布的输出，即
+{{<math>}}
+$$
+P_j(\pmb{y}|\theta_j)=\prod_{l=1}^{k^{(q)}}\vartheta_{qj}(l)^{\delta(y_q,l)}
+$$
+{{</math>}}
+其中，$k^{(q)}$为第$q$个基聚类器的簇数量，$\vartheta_{qj}(l)$为类别$l$的概率。
+
+&emsp;&emsp;基于上述假设，可最大化$m$个$r$元组{{<math>}}$Y=\{\pmb{y}_i|1\le i\le m\}${{</math>}}的似然来获取最优化参数$\Theta^*$，即
+{{<math>}}
+$$
+\begin{split}
+\Theta^* &= \mathop{\arg\max}\limits_{\Theta}\log L(Y|\Theta)=\mathop{\arg\max}\limits_{\Theta} \log\left( \prod_{i=1}^m P(\pmb{y}_i|\Theta)\right)\\
+&= \mathop{\arg\max}\limits_{\Theta} \sum_{i=1}^m \log \left( \sum_{j=1}^k\alpha_jP_j(\pmb{y}_i|\theta_j) \right)
+\end{split}
+$$
+{{</math>}}
+
+上述概率模型可用EM算法求解。
